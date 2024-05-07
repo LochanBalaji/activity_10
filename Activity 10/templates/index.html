@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Restaurant Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif; /* Use a clean and readable font */
+            background-color: #f5f5f5; /* Light background color for readability */
+            margin: 0;
+            padding: 20px;
+        }
+        
+        /* Center the main title */
+        h1 {
+            text-align: center;
+            color: #333; /* Dark color for contrast */
+        }
+        
+        /* Styling for section headers */
+        h2 {
+            color: #444;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        
+        /* Basic styling for forms */
+        form {
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        /* Inputs in forms */
+        input {
+            font-size: 1em;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%; /* Make inputs full-width */
+        }
+        
+        /* Form buttons */
+        input[type="submit"] {
+            background-color: #4CAF50; /* Green button */
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        
+        /* Hover effect for form buttons */
+        input[type="submit"]:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+        
+        /* Styling for unordered lists */
+        ul {
+            list-style-type: none; /* Remove bullets */
+            padding: 0;
+        }
+        
+        /* Styling for list items */
+        li {
+            background-color: #fff;
+            padding: 10px;
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        
+        /* Style for search results section */
+        #search-results {
+            margin-top: 20px;
+        }
+        
+        /* Footer styling (if needed) */
+        footer {
+            text-align: center;
+            color: #666;
+            font-size: 0.8em;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Restaurant Management</h1>
+    
+    <!-- Display list of dishes -->
+    <h2>All Dishes</h2>
+    <ul>
+        {% for dish in dishes %}
+            <li>ID: {{ dish[0] }}, Name: {{ dish[1] }}, Description: {{ dish[2] }}, Price: {{ dish[3] }}</li>
+        {% endfor %}
+    </ul>
+
+    <!-- Add a new dish -->
+    <h2>Add Dish</h2>
+    <form action="/add" method="post">
+        Name: <input type="text" name="name" required><br>
+        Description: <input type="text" name="description" required><br>
+        Price: <input type="number" name="price" required><br>
+        <input type="submit" value="Add Dish">
+    </form>
+
+    <!-- Update a dish -->
+    <h2>Update Dish</h2>
+    <form action="/update" method="post">
+        ID: <input type="number" name="id" required><br>
+        Name: <input type="text" name="name"><br>
+        Description: <input type="text" name="description"><br>
+        Price: <input type="number" name="price"><br>
+        <input type="submit" value="Update Dish">
+    </form>
+
+    <!-- Delete a dish -->
+    <h2>Delete Dish</h2>
+    <form action="/delete" method="post">
+        ID: <input type="number" name="id" required><br>
+        <input type="submit" value="Delete Dish">
+    </form>
+
+    <!-- Search for dishes -->
+    <h2>Search Dishes</h2>
+    <form action="/search" method="get">
+        Query: <input type="text" name="query"><br>
+        <input type="submit" value="Search">
+    </form>
+
+    <div id="search-results"></div>
+    
+    <!-- Script to handle search results -->
+    <script>
+        document.querySelector('form[action="/search"]').addEventListener('submit', function(event) {
+            event.preventDefault();
+            fetch(/search?query=${document.querySelector('input[name="query"]').value})
+                .then(response => response.json())
+                .then(data => {
+                    const resultsDiv = document.getElementById('search-results');
+                    resultsDiv.innerHTML = '';
+                    data.forEach(dish => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = ID: ${dish[0]}, Name: ${dish[1]}, Description: ${dish[2]}, Price: ${dish[3]};
+                        resultsDiv.appendChild(listItem);
+                    });
+                });
+        });
+    </script>
+</body>
+</html>
